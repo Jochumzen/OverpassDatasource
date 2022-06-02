@@ -1,14 +1,17 @@
 package com.mapifesto.overpass_datasource
 
+import com.mapifesto.overpass_datasource.node.NodesDto
+import com.mapifesto.overpass_datasource.way.WaysDto
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
-import kotlinx.serialization.json.Json
 
 interface OverpassService {
 
-    suspend fun getNodeById(id: String): NodesDto
+    suspend fun getNodesById(id: String): NodesDto
+
+    suspend fun getWaysById(id: String): WaysDto
 
     companion object Factory {
         fun build(): OverpassService {

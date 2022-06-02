@@ -11,7 +11,10 @@ java {
 
 
 dependencies {
-    "implementation"(Ktor.core)
-    "implementation"(Ktor.clientSerialization)
-    "implementation"(Ktor.android)
+    implementation(Ktor.core)
+    implementation(Ktor.clientSerialization)
+    implementation(Ktor.android)
+
+    implementation(project(":domain"))
+
 }

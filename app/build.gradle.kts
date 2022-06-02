@@ -71,4 +71,5 @@ dependencies {
     kapt(Hilt.compiler)
 
     implementation(project(":overpass_datasource"))
+    implementation(project(":domain"))
 }

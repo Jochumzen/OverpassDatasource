@@ -1,4 +1,4 @@
-package com.mapifesto.overpass_datasource
+package com.mapifesto.overpass_datasource.node
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,7 +18,7 @@ data class NodesDto(
     @SerialName("elements")
     val elements: List<ElementDto>,
 
-) {
+    ) {
 
     @Serializable
     data class Osm3s(

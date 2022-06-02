@@ -3,45 +3,45 @@ package com.mapifesto.overpassdatasource
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.mapifesto.overpass_datasource.DataState
-import com.mapifesto.overpass_datasource.Node
-import com.mapifesto.overpass_datasource.OverpassInteractors
+import androidx.compose.ui.unit.dp
+import com.mapifesto.domain.OsmElement
+import com.mapifesto.overpass_datasource.OverpassDataState
 import com.mapifesto.overpass_datasource.OverpassIntermediary
 import com.mapifesto.overpassdatasource.ui.theme.OverpassDatasourceTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var overpassIntermediary: OverpassIntermediary
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContent {
             OverpassDatasourceTheme {
-               Compose()
+               Compose(overpassIntermediary = overpassIntermediary)
             }
         }
     }
 }
 
 @Composable
-fun Compose() {
+fun Compose(
+    overpassIntermediary: OverpassIntermediary
+) {
 
     var showWhat by remember { mutableStateOf("") }
     var error by remember {mutableStateOf(false)}
-    var node by remember { mutableStateOf<Node?>(null)}
-
-    val overpass = OverpassIntermediary()
+    var element by remember { mutableStateOf<OsmElement?>(null)}
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -53,30 +53,38 @@ fun Compose() {
 
                 Button(
                     onClick = {
-                        showWhat = ""
+                        showWhat = "spinner"
                         error = false
-                        overpass.getNodeById(1222870560) {
-                            if (it.node != null) {
-                                node = it.node
-                                showWhat = "node"
-                            } else {
-                                error = true
+                        overpassIntermediary.getElementByIdAndType(1019648199, "way") {
+                            when(it) {
+                                is OverpassDataState.Error ->{
+                                    error = true
+                                }
+                                is OverpassDataState.OverpassData -> {
+                                    element = it.data
+                                    showWhat = "element"
+                                }
                             }
                         }
 
                     }
                 ) {
-                    Text("Node")
+                    Text("Element")
                 }
 
             }
 
             if(error) Text("Error") else {
                 when(showWhat) {
-                    "node" -> {
-                        node!!.tags.forEach {
+                    "element" -> {
+                        element!!.osmTags().tags.forEach {
                             Text("${it.key}: ${it.value}")
                         }
+                    }
+                    "spinner" -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
                     }
                     else -> {}
                 }
