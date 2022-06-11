@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.onEach
 
 interface OverpassIntermediary {
 
-    fun getElementByIdAndType(id: Long, type: String, callback: (OverpassDataState<OsmElement>) -> Unit)
+    fun getElementByIdAndType(id: Long, type: String, callback: (OverpassDataState<OverpassElement>) -> Unit)
 
 }
 
 class OverpassIntermediaryImpl: OverpassIntermediary {
 
-    private var callback: (OverpassDataState<OsmElement>) -> Unit = {}
+    private var callback: (OverpassDataState<OverpassElement>) -> Unit = {}
 
-    override fun getElementByIdAndType(id: Long, type: String, callback: (OverpassDataState<OsmElement>) -> Unit) {
+    override fun getElementByIdAndType(id: Long, type: String, callback: (OverpassDataState<OverpassElement>) -> Unit) {
         this.callback = callback
 
         when (type) {
@@ -35,8 +35,8 @@ class OverpassIntermediaryImpl: OverpassIntermediary {
                 is OverpassDataState.Error -> {
                     callback(OverpassDataState.Error(dataState.error))
                 }
-                is OverpassDataState.OverpassData -> {
-                    callback(OverpassDataState.OverpassData(dataState.data))
+                is OverpassDataState.Data -> {
+                    callback(OverpassDataState.Data(dataState.data))
                 }
             }
 
@@ -52,8 +52,8 @@ class OverpassIntermediaryImpl: OverpassIntermediary {
                 is OverpassDataState.Error -> {
                     callback(OverpassDataState.Error(dataState.error))
                 }
-                is OverpassDataState.OverpassData -> {
-                    callback(OverpassDataState.OverpassData(dataState.data))
+                is OverpassDataState.Data -> {
+                    callback(OverpassDataState.Data(dataState.data))
                 }
             }
         }.launchIn(CoroutineScope(Dispatchers.Main))
@@ -61,12 +61,12 @@ class OverpassIntermediaryImpl: OverpassIntermediary {
 }
 
 class OverpassIntermediaryMockup: OverpassIntermediary {
-    override fun getElementByIdAndType(id: Long, type: String, callback: (OverpassDataState<OsmElement>) -> Unit) {
+    override fun getElementByIdAndType(id: Long, type: String, callback: (OverpassDataState<OverpassElement>) -> Unit) {
         when(type) {
             "node" ->
                 callback(
-                    OverpassDataState.OverpassData(
-                        data = Node(
+                    OverpassDataState.Data(
+                        data = OverpassNode(
                             id = id,
                             location = LatLon(
                                 lat = 55.1,
@@ -80,8 +80,8 @@ class OverpassIntermediaryMockup: OverpassIntermediary {
                 )
             "way" ->
                 callback(
-                    OverpassDataState.OverpassData(
-                        data = Way(
+                    OverpassDataState.Data(
+                        data = OverpassWay(
                             id = id,
                             location = LatLon(
                                 lat = 55.1,

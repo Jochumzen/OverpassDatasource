@@ -1,16 +1,16 @@
 package com.mapifesto.overpass_datasource
 
 import com.mapifesto.domain.LatLon
-import com.mapifesto.domain.Node
 import com.mapifesto.domain.OsmTags
-import com.mapifesto.domain.Way
+import com.mapifesto.domain.OverpassNode
+import com.mapifesto.domain.OverpassWay
 import com.mapifesto.overpass_datasource.node.NodesDto
 import com.mapifesto.overpass_datasource.way.WaysDto
 
 object Mapper {
 
-    fun createNode(element: NodesDto.ElementDto): Node {
-        return Node(
+    fun createNode(element: NodesDto.ElementDto): OverpassNode {
+        return OverpassNode(
             id = element.id,
             location = LatLon(
                 lat = element.lat,
@@ -22,8 +22,8 @@ object Mapper {
         )
     }
 
-    fun createWay(element: WaysDto.ElementDto): Way {
-        return Way(
+    fun createWay(element: WaysDto.ElementDto): OverpassWay {
+        return OverpassWay(
             id = element.id,
             location = LatLon(
                 lat = element.center.lat,

@@ -6,7 +6,7 @@ sealed class OverpassDataState<T> {
         val error: String
     ): OverpassDataState<T>()
 
-    data class OverpassData<T>(
+    data class Data<T>(
         val data: T
     ): OverpassDataState<T>()
 

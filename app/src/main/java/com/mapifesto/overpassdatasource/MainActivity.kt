@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mapifesto.domain.OsmElement
+import com.mapifesto.domain.OverpassElement
 import com.mapifesto.overpass_datasource.OverpassDataState
 import com.mapifesto.overpass_datasource.OverpassIntermediary
 import com.mapifesto.overpassdatasource.ui.theme.OverpassDatasourceTheme
@@ -41,7 +41,7 @@ fun Compose(
 
     var showWhat by remember { mutableStateOf("") }
     var error by remember {mutableStateOf(false)}
-    var element by remember { mutableStateOf<OsmElement?>(null)}
+    var element by remember { mutableStateOf<OverpassElement?>(null)}
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -60,7 +60,7 @@ fun Compose(
                                 is OverpassDataState.Error ->{
                                     error = true
                                 }
-                                is OverpassDataState.OverpassData -> {
+                                is OverpassDataState.Data -> {
                                     element = it.data
                                     showWhat = "element"
                                 }
@@ -77,7 +77,7 @@ fun Compose(
             if(error) Text("Error") else {
                 when(showWhat) {
                     "element" -> {
-                        element!!.osmTags().tags.forEach {
+                        element!!.tags().tags.forEach {
                             Text("${it.key}: ${it.value}")
                         }
                     }

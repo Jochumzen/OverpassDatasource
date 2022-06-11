@@ -1,6 +1,6 @@
 package com.mapifesto.overpass_datasource.way
 
-import com.mapifesto.domain.Way
+import com.mapifesto.domain.OverpassWay
 import com.mapifesto.overpass_datasource.OverpassDataState
 import com.mapifesto.overpass_datasource.Mapper
 import com.mapifesto.overpass_datasource.OverpassService
@@ -12,7 +12,7 @@ class GetWayById(
 ) {
     fun execute(
         id: String
-    ): Flow<OverpassDataState<Way>> = flow {
+    ): Flow<OverpassDataState<OverpassWay>> = flow {
 
         var errorMessage: String? = null
 
@@ -39,7 +39,7 @@ class GetWayById(
 
         val way = Mapper.createWay(element)
 
-        emit(OverpassDataState.OverpassData(way))
+        emit(OverpassDataState.Data(way))
 
 
     }
