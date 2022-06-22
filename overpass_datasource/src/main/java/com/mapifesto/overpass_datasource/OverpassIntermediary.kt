@@ -74,7 +74,8 @@ class OverpassIntermediaryMockup: OverpassIntermediary {
                             ),
                             tags = OsmTags(
                                 tags = mapOf("name" to "Mockup store node", "amenity" to "bar", "opening_hours" to "Mo-Su 10.00-19.00")
-                            )
+                            ),
+                            osmElementType = OsmElementType.NODE
                         )
                     )
                 )
@@ -90,7 +91,8 @@ class OverpassIntermediaryMockup: OverpassIntermediary {
                             tags = OsmTags(
                                 tags = mapOf("name" to "Mockup store way", "shop" to "supermarket")
                             ),
-                            nodes = listOf()
+                            nodes = listOf(),
+                            osmElementType = OsmElementType.WAY
                         )
                     )
                 )
