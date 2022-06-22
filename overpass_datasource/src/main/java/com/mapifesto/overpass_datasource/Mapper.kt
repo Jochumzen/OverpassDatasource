@@ -1,9 +1,6 @@
 package com.mapifesto.overpass_datasource
 
-import com.mapifesto.domain.LatLon
-import com.mapifesto.domain.OsmTags
-import com.mapifesto.domain.OverpassNode
-import com.mapifesto.domain.OverpassWay
+import com.mapifesto.domain.*
 import com.mapifesto.overpass_datasource.node.NodesDto
 import com.mapifesto.overpass_datasource.way.WaysDto
 
@@ -18,7 +15,8 @@ object Mapper {
             ),
             tags = OsmTags(
                 tags = element.tags
-            )
+            ),
+            osmElementType = OsmElementType.NODE
         )
     }
 
@@ -32,7 +30,8 @@ object Mapper {
             tags = OsmTags(
                 tags = element.tags
             ),
-            nodes = element.nodes
+            nodes = element.nodes,
+            osmElementType = OsmElementType.WAY
         )
     }
 }
