@@ -1,11 +1,11 @@
-package com.mapifesto.overpass_datasource.way
+package com.mapifesto.overpass_datasource.relation
 
+import com.mapifesto.overpass_datasource.way.WaysDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WaysDto(
-
+data class RelationsDto(
 
     @SerialName("version")
     val version: Double,
@@ -30,7 +30,7 @@ data class WaysDto(
         @SerialName("copyright")
         val copyright: String?,
 
-        )
+    )
 
     @Serializable
     data class ElementDto(
@@ -44,12 +44,11 @@ data class WaysDto(
         @SerialName("center")
         val center: CenterDto,
 
-        @SerialName("nodes")
-        val nodes: List<Long>,
+        @SerialName("members")
+        val members: List<MemberDto>,
 
         @SerialName("tags")
         val tags: Map<String,String>,
-
     ) {
 
         @Serializable
@@ -62,5 +61,20 @@ data class WaysDto(
             val lon: Double,
 
         )
+
+        @Serializable
+        data class MemberDto(
+
+            @SerialName("type")
+            val type: String,
+
+            @SerialName("ref")
+            val ref: Long,
+
+            @SerialName("role")
+            val role: String,
+
+        )
     }
+
 }

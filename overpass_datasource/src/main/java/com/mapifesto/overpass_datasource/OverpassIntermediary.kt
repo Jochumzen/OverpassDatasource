@@ -10,6 +10,9 @@ interface OverpassIntermediary {
 
     fun getElementByIdAndType(id: Long, type: String, callback: (OverpassDataState<OverpassElement>) -> Unit)
 
+    fun getElementsWithNameInBoundingBox(boundingBox: BoundingBox, callback: (OverpassDataState<OverpassElements>) -> Unit)
+
+    fun getElementsSatisfyingTagRestrictions(boundingBox: BoundingBox, tagRestrictions: IntersectionOfOverpassTagRestrictions, callback: (OverpassDataState<OverpassElements>) -> Unit)
 }
 
 class OverpassIntermediaryImpl: OverpassIntermediary {
@@ -22,8 +25,48 @@ class OverpassIntermediaryImpl: OverpassIntermediary {
         when (type) {
             "node" -> getNodeById(id)
             "way" -> getWayById(id)
+            "relation" -> getRelationById(id)
             else -> {}
         }
+    }
+
+    override fun getElementsWithNameInBoundingBox(
+        boundingBox: BoundingBox,
+        callback: (OverpassDataState<OverpassElements>) -> Unit
+    ) {
+        val getElementsWithNameInBoundingBox = OverpassInteractors.build().getElementsWithNameInBoundingBox
+        getElementsWithNameInBoundingBox.execute(boundingBox).onEach { dataState ->
+
+            when(dataState) {
+                is OverpassDataState.Error -> {
+                    callback(OverpassDataState.Error(dataState.error))
+                }
+                is OverpassDataState.Data -> {
+                    callback(OverpassDataState.Data(dataState.data.cleanList()))
+                }
+            }
+
+        }.launchIn(CoroutineScope(Dispatchers.Main))
+    }
+
+    override fun getElementsSatisfyingTagRestrictions(
+        boundingBox: BoundingBox,
+        tagRestrictions: IntersectionOfOverpassTagRestrictions,
+        callback: (OverpassDataState<OverpassElements>) -> Unit
+    ) {
+        val getElementsWithNameInBoundingBox = OverpassInteractors.build().getElementsSatisfyingTagRestrictions
+        getElementsWithNameInBoundingBox.execute(boundingBox, tagRestrictions).onEach { dataState ->
+
+            when(dataState) {
+                is OverpassDataState.Error -> {
+                    callback(OverpassDataState.Error(dataState.error))
+                }
+                is OverpassDataState.Data -> {
+                    callback(OverpassDataState.Data(dataState.data.cleanList()))
+                }
+            }
+
+        }.launchIn(CoroutineScope(Dispatchers.Main))
     }
 
     private fun getNodeById(id: Long) {
@@ -58,6 +101,23 @@ class OverpassIntermediaryImpl: OverpassIntermediary {
             }
         }.launchIn(CoroutineScope(Dispatchers.Main))
     }
+
+    private fun getRelationById(id: Long) {
+
+        val getRelation = OverpassInteractors.build().getRelationById
+        getRelation.execute(id.toString()).onEach { dataState ->
+
+            when(dataState) {
+                is OverpassDataState.Error -> {
+                    callback(OverpassDataState.Error(dataState.error))
+                }
+                is OverpassDataState.Data -> {
+                    callback(OverpassDataState.Data(dataState.data))
+                }
+            }
+        }.launchIn(CoroutineScope(Dispatchers.Main))
+    }
+
 }
 
 class OverpassIntermediaryMockup: OverpassIntermediary {
@@ -98,6 +158,21 @@ class OverpassIntermediaryMockup: OverpassIntermediary {
                 )
         }
 
+    }
+
+    override fun getElementsWithNameInBoundingBox(
+        boundingBox: BoundingBox,
+        callback: (OverpassDataState<OverpassElements>) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getElementsSatisfyingTagRestrictions(
+        boundingBox: BoundingBox,
+        tagRestrictions: IntersectionOfOverpassTagRestrictions,
+        callback: (OverpassDataState<OverpassElements>) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 
 }
