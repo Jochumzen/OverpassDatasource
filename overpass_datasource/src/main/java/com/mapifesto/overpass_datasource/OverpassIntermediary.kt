@@ -62,7 +62,7 @@ class OverpassIntermediaryImpl: OverpassIntermediary {
                     callback(OverpassDataState.Error(dataState.error))
                 }
                 is OverpassDataState.Data -> {
-                    callback(OverpassDataState.Data(dataState.data.cleanList()))
+                    callback(OverpassDataState.Data(dataState.data))
                 }
             }
 

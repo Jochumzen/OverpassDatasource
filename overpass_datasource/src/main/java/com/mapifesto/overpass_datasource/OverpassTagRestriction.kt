@@ -40,9 +40,9 @@ data class UnionOfOverpassTagRestrictions(
 data class IntersectionOfOverpassTagRestrictions(
     val restrictionUnions: List<UnionOfOverpassTagRestrictions>
 ) {
-    //val currentItem = IntArray(10)
 
-    fun item(array: IntArray): String {
+
+    private fun item(array: IntArray): String {
         val str: StringBuilder = java.lang.StringBuilder()
         restrictionUnions.forEachIndexed { index, union ->
             str.append(union.restrictions[array[index]].asOverpassString() )
