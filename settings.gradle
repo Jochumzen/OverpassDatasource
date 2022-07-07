@@ -16,4 +16,4 @@ rootProject.name = "OverpassDatasource"
 include ':app'
 include ':overpass_datasource'
 include ':domain'
-project(':domain').projectDir = new File('/../MapiGanja/domain')
+project(':domain').projectDir = new File('/../MapiDomain/domain')
